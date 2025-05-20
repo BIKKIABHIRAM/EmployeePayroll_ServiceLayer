@@ -1,8 +1,8 @@
 package com.bridgelabz.EmployeePayroll.controller;
 
-import com.bridgelabz.EmployeePayroll.model.EmployeePayroll;
-import com.bridgelabz.EmployeePayroll.service.EmployeePayrollService;
-import jakarta.validation.Valid;
+import com.bridgelabz.EmployeePayroll.dto.EmployeePayrollDTO;
+import com.bridgelabz.EmployeePayroll.model.EmployeePayrollData;
+import com.bridgelabz.EmployeePayroll.service.IEmployeePayrollService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,32 +13,33 @@ import java.util.List;
 public class EmployeePayrollController {
 
     @Autowired
-    private EmployeePayrollService service;
+    private IEmployeePayrollService employeePayrollService;
 
     @GetMapping("/")
-    public List<EmployeePayroll> getAllEmployees() {
-        return service.getAllEmployees();
+    public List<EmployeePayrollData> getAllEmployees() {
+        return employeePayrollService.getEmployeePayrollData();
     }
 
     @GetMapping("/get/{id}")
-    public EmployeePayroll getEmployeeById(@PathVariable int id) {
-        return service.getEmployeeById(id);
+    public EmployeePayrollData getEmployeeById(@PathVariable("id") int empId) {
+        return employeePayrollService.getEmployeePayrollDataById(empId);
     }
 
     @PostMapping("/create")
-    public EmployeePayroll createEmployee(@Valid @RequestBody EmployeePayroll employee) {
-        return service.createEmployee(employee);
+    public EmployeePayrollData createEmployee(@RequestBody EmployeePayrollDTO empPayrollDTO) {
+        return employeePayrollService.createEmployeePayrollData(empPayrollDTO);
     }
 
-    @PutMapping("/update")
-    public EmployeePayroll updateEmployee(@Valid @RequestBody EmployeePayroll employee) {
-        return service.updateEmployee(employee);
+    @PutMapping("/update/{id}")
+    public EmployeePayrollData updateEmployee(@PathVariable("id") int empId,
+                                              @RequestBody EmployeePayrollDTO empPayrollDTO) {
+        return employeePayrollService.updateEmployeePayrollData(empId, empPayrollDTO);
     }
 
     @DeleteMapping("/delete/{id}")
-    public String deleteEmployee(@PathVariable int id) {
-        service.deleteEmployee(id);
-        return "Employee with ID " + id + " deleted!";
+    public void deleteEmployee(@PathVariable("id") int empId) {
+        employeePayrollService.deleteEmployeePayrollData(empId);
     }
 }
+
 
